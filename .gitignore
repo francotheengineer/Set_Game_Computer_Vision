@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .ipynb_checkpoints/
+.DS_Store
 .idea/
 .Python
 build/
