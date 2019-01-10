@@ -10,5 +10,5 @@ A computer vision project to play the card game set
 ## Output:
 
 <p align="center">
-<img src="out.jpg" width="50%""/>
+<img src="output.jpg" width="50%""/>
 </p>
