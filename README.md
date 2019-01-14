@@ -4,11 +4,19 @@ A computer vision project to play the card game set
 ## Input Images:
 
 <p align="center">
-<img src="IMG_20190106_161905.jpg" width="50%""/>
+<img src="source_cards/set_game_board.jpg" width="40%""/>
 </p>
 
 ## Output:
 
+
 <p align="center">
-<img src="output.jpg" width="50%""/>
+<img src="sliced_cards/output.jpg" width="40%""/>
+</p>
+
+
+Correct analysis: {'shape': 1, 'fill': 1, 'number': 2, 'colour': 1}
+Card: 
+<p align="center">
+<img src="sliced_cards/slice_0.jpg" width="40%""/>
 </p>
