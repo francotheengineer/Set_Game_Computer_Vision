@@ -18,5 +18,5 @@ A computer vision project to play the card game set
 Correct analysis: {'shape': 1, 'fill': 1, 'number': 2, 'colour': 1}
 Card: 
 <p align="center">
-<img src="sliced_cards/slice_0.jpg" width="40%""/>
+<img src="sliced_cards/slice_0.png" width="40%""/>
 </p>
