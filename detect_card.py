@@ -4,10 +4,13 @@
 # In[1]:
 
 
+#!/usr/bin/env python
+# coding: utf-8
+
 import numpy as np
 import cv2
 import os
-
+import copy
 import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,8 +18,13 @@ from collections import namedtuple
 import operator
 from sklearn.cluster import KMeans
 
-#red = 1, purple = 2, green =3
-#empty 1 , speckled 2, filled 3
+#red=1, purple=2, green=3
+#empty=1 , speckled=2, filled=3
+#rectange=1, oval=2, squigle=3
+
+
+# In[2]:
+
 
 def check_colour(img, card_props):
     height, width, dim = img.shape
@@ -27,14 +35,13 @@ def check_colour(img, card_props):
 
     red_low = cv2.inRange(hsv, (0, 20, 50), (10, 255, 255))
     red_high = cv2.inRange(hsv, (170, 40, 50), (180, 255, 255))
-
     purple = cv2.inRange(hsv, (80, 20, 0), (180, 255, 255))
-
     green = cv2.inRange(hsv, (36, 20, 0), (80, 255, 255))
     mask =  [red_low, red_high, purple, green]
 
     max_percent_area = 0
     max_percent_area_index = 0
+    
     for i in range(len(mask)):
         target = cv2.bitwise_and(img,img, mask=mask[i])
 
@@ -44,14 +51,6 @@ def check_colour(img, card_props):
             max_percent_area_index  = i
             max_percent_area = percent_area
 
-        # cv2.countNonZero(target)
-        # print(percent_area)
-        # cv2.namedWindow('result', cv2.WINDOW_NORMAL)
-        # cv2.imshow('result',target)
-        # cv2.waitKey(0)
-
-    print(max_percent_area)
-    print(max_percent_area_index)
     if max_percent_area_index == 0:
         card_props['colour'] = 1
     elif max_percent_area_index == 1 :
@@ -70,9 +69,17 @@ def check_colour(img, card_props):
 
     return card_props
 
+
+# In[3]:
+
+
 def angle_cos(p0, p1, p2):
    d1, d2 = (p0-p1).astype('float'), (p2-p1).astype('float')
    return abs(np.dot(d1, d2) / np.sqrt(np.dot(d1, d1)*np.dot(d2, d2)))
+
+
+# In[4]:
+
 
 def find_cards(img):
    img = cv2.GaussianBlur(img, (5, 5), 0)
@@ -87,7 +94,8 @@ def find_cards(img):
                
            else:
                retval, bin = cv2.threshold(gray, thrs, 255, cv2.THRESH_BINARY)
-           bin, contours, hierarchy = cv2.findContours(bin, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+            
+           contours, hierarchy = cv2.findContours(bin, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
            for cnt in contours:
                
                leftmost = tuple(cnt[cnt[:, :, 0].argmin()][0])
@@ -105,28 +113,25 @@ def find_cards(img):
    return cards
 
 
+# In[5]:
+
+
 def find_shapes(image):
-    print('-------')
+
     card_props = {'shape': 0, 'fill': 0, 'number': 0, 'colour': 0}
     
     blur_img = cv2.blur(image, (3, 3))
     gray_img = cv2.cvtColor(blur_img, cv2.COLOR_BGR2GRAY)
     thr_image = cv2.Canny(gray_img, 50, 220, apertureSize=3)
     thr_image = cv2.dilate(thr_image, np.ones((3, 3), np.uint8))
-    cont_img, contours, hierarchy = cv2.findContours(thr_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
+    contours, hierarchy = cv2.findContours(thr_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     for cnt in contours:
         if cv2.contourArea(cnt) > 5000 and cv2.contourArea(cnt) < 200000:
-            # cv2.drawContours(draw_on, [cnt], 0, (0, 255, 0), 5)
-            
-#             print(cv2.arcLength(cnt, True))
-#             print(cv2.contourArea(cnt))
+            cv2.drawContours(draw_on, [cnt], 0, (0, 255, 0), 6)
             epsilon = 0.005*cv2.arcLength(cnt, True)
             approx = cv2.approxPolyDP(cnt, epsilon, True)
             
-            
-            print(approx.shape)
             if approx.shape[0] == 4:
                 card_props['shape'] = 1
                 card_props['number'] += 1 
@@ -140,49 +145,58 @@ def find_shapes(image):
     card_props_out = check_colour(image[:], card_props)
     return card_props_out
 
-image_file = '/Users/francis/projects/Set_Game_Computer_Vision/IMG_20190106_161905.jpg'
+
+# In[6]:
+
+
+image_file = 'source_cards/set_game_board.jpg'
 
 img = cv2.imread(image_file)
-img_2 = img[:]
+img_2 = copy.deepcopy(img)
 cards = find_cards(img)
 cards = cv2.groupRectangles(cards, 1)[0]
 
+name_iterator = 0 
 for card in cards:
-    print('for')
+
     card_img = img[card[1]:card[1]+card[3], card[0]:card[0]+card[2]]
-    cv2.imwrite('card1.png', card_img)
-#     cv2.imshow('thiscard', card_img)
-    draw_on = card_img[:]
-
-    # plt.imshow(cv2.cvtColor(card_img, cv2.COLOR_BGR2RGB))
-    # plt.show()
-
+    
+    draw_on = copy.deepcopy(card_img)
     
     shapes = find_shapes(card_img)
     print(shapes)
+    
     plt.imshow(cv2.cvtColor(draw_on, cv2.COLOR_BGR2RGB))
+    
     plt.show()
 
-    # cv2.rectangle(img_2, (card[0], card[1]), (card[0]+card[2], card[1]+card[3]), (255, 0, 0), thickness=2)
-# print("Found {num} cards and {shapes} shapes (d={d}, o={o}, s={s}).".format(
-#     num=len(cards),
-#     shapes=shape_count,
-#     s=shape_count["squiggles"],
-#     o=shape_count["ovals"],
-#     d=shape_count["diamonds"]
+    cv2.rectangle(img_2, (card[0], card[1]), (card[0]+card[2], card[1]+card[3]), (255, 0, 0), thickness=10)
+    name_iterator += 1
+    
+    cv2.imwrite('sliced_cards/slice_' + str(name_iterator) + '.png', draw_on)
 
-
-# #     plt.imshow(img)
 # ch = 0xFF & cv2.waitKey()
 # if ch == 27:
 #     exit()
     
 # cv2.waitKey(0)
-# plt.imshow(cv2.cvtColor(img_2, cv2.COLOR_BGR2RGB))
-# plt.show()
-cv2.imwrite('output.jpg', img_2)
+plt.imshow(cv2.cvtColor(img_2, cv2.COLOR_BGR2RGB))
+plt.show()
+cv2.imwrite('sliced_cards/output.png', img_2)
 # cv2.destroyAllWindows()
 # cv2.waitKey(1)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
