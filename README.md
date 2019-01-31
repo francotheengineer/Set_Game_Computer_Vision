@@ -28,9 +28,9 @@ Card:
 
 <div class="row">
   <div class="column">
-    <img src="sliced_cards/slice_0.png" alt="Snow" style="width:100%">
+    <img src="sliced_cards/slice_1.png" alt="Snow" style="width:100%">
   </div>
   <div class="column">
-    <img src="sliced_cards/slice_1.png" alt="Forest" style="width:100%">
+    <img src="sliced_cards/slice_2.png" alt="Forest" style="width:100%">
   </div>
 </div>
