@@ -27,6 +27,6 @@ Correct analysis:
 Card: 
 
 <p align="middle">
-    <img src="sliced_cards/slice_1.png" width="30%" >
-    <img src="sliced_cards/slice_2.png"  width="30%" >
+    <img src="sliced_cards/slice_1.png" width="40%" >
+    <img src="sliced_cards/slice_2.png"  width="40%" >
 </p>
