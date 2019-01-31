@@ -1,4 +1,4 @@
-# Set Game Compter Vision
+# Set_Game_Compter_Vision
 
 A computer vision project to play the card game 'Set' ( https://en.wikipedia.org/wiki/Set_(card_game) ).
 
@@ -18,14 +18,19 @@ There are some tools within `tools` to calibrate the HSV values within the funct
 ## Output:
 
 <p align="center">
-<img src="sliced_cards/output.jpg" width="40%""/>
+<img src="sliced_cards/output.png" width="40%""/>
 </p>
 
 Correct analysis: 
 `{'shape': 1, 'fill': 1, 'number': 2, 'colour': 1}` and `{'shape': 2, 'fill': 3, 'number': 2, 'colour': 3}`
 
 Card: 
-<p align="center">
-<img src="sliced_cards/slice_0.png" width="40%""/>
-<img src="sliced_cards/slice_1.png" width="40%""/>
-</p>
+
+<div class="row">
+  <div class="column">
+    <img src="sliced_cards/slice_0.png" alt="Snow" style="width:100%">
+  </div>
+  <div class="column">
+    <img src="sliced_cards/slice_1.png" alt="Forest" style="width:100%">
+  </div>
+</div>
