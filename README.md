@@ -26,11 +26,7 @@ Correct analysis:
 
 Card: 
 
-<div class="row">
-  <div class="column">
+<p align="middle">
     <img src="sliced_cards/slice_1.png" width="30%" >
-  </div>
-  <div class="column">
     <img src="sliced_cards/slice_2.png"  width="30%" >
-  </div>
-</div>
+</p>
