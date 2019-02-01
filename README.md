@@ -1,4 +1,4 @@
-# Set_Game_Compter_Vision
+# Set Game Compter Vision
 
 A computer vision project to play the card game 'Set' ( https://en.wikipedia.org/wiki/Set_(card_game) ).
 
